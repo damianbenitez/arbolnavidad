@@ -1,0 +1,16 @@
+class arbol {
+  var lugares
+  var vejez
+  var tamanioTronco 
+}
+
+class regalo {
+ var destinatarios = []
+ var espacio = 1
+ method importancia(){
+  return 2 * self.cantidadMisiones()
+ }
+ method cantidadMisiones(){
+  return destinatarios.size()
+ }
+}
