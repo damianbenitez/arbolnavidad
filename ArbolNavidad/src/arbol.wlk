@@ -2,6 +2,38 @@ class Arbol {
   var lugares
   var vejez
   var tamanioTronco
+  var items
+  constructor(_lugares,_vejez, _tamanioTronco){
+  	lugares = _lugares
+  	vejez = _vejez
+  	tamanioTronco = _tamanioTronco
+  }
+  method lugares() = self.vejez() * self.tamanioTronco()
+  method vejez() = vejez
+  method vejez(_vejez) {
+  	vejez = _vejez
+  }
+  method tamanioTronco() = tamanioTronco
+  method tamanioTronco(_tamanioTronco){
+  	tamanioTronco = _tamanioTronco
+  }
+  method items() = items
+  method agregarItem(_item) {
+  	if (_item.lugares() <= self.capacidadDisponible()){
+		items.add(_item)
+	}else{
+		throw new Exception("No se pudo agregar el item")  		
+  	}
+  	
+  }
+  method capacidadUsada() = items.fold(0, {acum, item =>  acum + item.lugares()} )
+  method capacidadDisponible() = self.lugares() - self.capacidadUsada()
+  method sumaTodasImportancias() = items.fold(0, {acum, item =>  acum + item.importancia()} )
+  method importancia() = self.sumaTodasImportancias()
+  method promedioImportancia() = self.sumaTodasImportancias() / self.items().size()
+  method itemsImportantes() = items.filter({item => item.importancia() > self.promedioImportancia()})
+  method itemsVoluminosos() = items.filter({item => item.lugares() > 5 })
+    
 }
 
 class Regalo {
@@ -86,5 +118,14 @@ class Figura {
 	method adornos(_adornos){
 		adornos = _adornos
 	}
-	method importancia() = adornos.fold(0, {acum, adorno =>  acum + adorno.imporancia()} )
+	method lugares() = 1 + adornos.fold(0, {acum, adorno =>  acum + adorno.lugares()} )
+	method adornosOrdenadosPorImportancia() = 
+		adornos.sortedBy({adorno1, adorno2 => adorno1.importancia() < adorno2.importancia()})
+	method adornoMasImportante() = self.adornosOrdenadosPorImportancia().first() 
+	method importancia() = self.adornoMasImportante()	 
+}
+
+class Estrella{
+	method lugares() = 1	 
+	method importancia() = 10
 }
