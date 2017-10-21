@@ -1,13 +1,63 @@
 import arbol.*
-describe "Tests del abolito"{
-	var arbolito = new Arbol(2,3)
-	test "La capacidad de un arbol con vejez 2 y tamaño de tronco 3 es 6 " {
-		assert.equals(6, arbolito.lugares())
+describe "Tests de arbol"{
 	
-	}
+	
+	var arbolito = new Arbol(2,3)
+	var tarjeta1 = new Tarjeta("pepe", 10)	
+	var tarjeta2 = new Tarjeta("carlos", 15)
+	var regalo1 = new Regalo(["pepe,maria"])
+	var adorno1 = new Adorno(2,1)
+	var adorno2 = new Adorno(3,1)
+	var figura1 = new Figura([adorno1])
+	var estrella1 = new Estrella()
+	 
+
 	test "La importancia inical del arbol es 0" {
 		assert.equals(0, arbolito.importancia())
 	
+	}
+	test "La cantidad inicial de items de un arbol es 0"{
+		assert.equals(0, arbolito.items().size())
+	}
+		
+	test "La capacidad de un arbol con vejez 2 y tamaño de tronco 3 es 6 " {
+		assert.equals(6, arbolito.lugares())	
+	}
+	
+	test "La capacidad disponible de un arbol es inicial menos lo que ocupan sus items"{
+		arbolito.agregarItem(regalo1)
+		arbolito.agregarItem(adorno1)
+		assert.equals(arbolito.lugares() - regalo1.lugares() - adorno1.lugares(), arbolito.capacidadDisponible())
+	}
+
+	test "Si tiene lugar para un item lo puede agregar"{
+		arbolito.agregarItem(figura1)
+		assert.that(arbolito.items().contains(figura1))	
+	}
+	test "Hacer que un regalo tenga como destinatario a una persona dada"{
+		regalo1.agregarDestinatario("nuevoDestinatario")
+		assert.that(regalo1.destinatarios().contains("nuevoDestinatario"))
+	}
+	test "Hacer que una tarjeta tenga como destinatario a una persona dada"{
+		tarjeta1.agregarDestinatario("nuevoDestinatario")
+		assert.that(tarjeta1.destinatarios().contains("nuevoDestinatario"))
+	}
+	test "Hacer que una estrella tenga como destinatario a una persona dada"{
+		estrella1.agregarDestinatario("nuevoDestinatario")
+		assert.that(estrella1.destinatarios().contains("nuevoDestinatario"))
+	}
+	test "la importancia de un arbol es la suma de la importancia de los items"{
+		arbolito.agregarItem(regalo1)
+		arbolito.agregarItem(adorno1)
+		assert.equals(regalo1.importancia()+ adorno1.importancia(), arbolito.importancia())
+	}
+	test "Conocer cuantas cosas importantes hay en un arbol"{		
+		arbolito.agregarItem(tarjeta1)
+		arbolito.agregarItem(tarjeta2)
+		arbolito.agregarItem(regalo1)
+		arbolito.agregarItem(adorno1)
+		arbolito.agregarItem(estrella1)
+		assert.equals(3, arbolito.itemsImportantes().size()	)
 	}
 
 }

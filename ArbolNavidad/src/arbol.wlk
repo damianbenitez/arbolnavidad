@@ -2,6 +2,7 @@ class Arbol {
   var vejez
   var tamanioTronco
   var items = []
+  
   constructor(_vejez, _tamanioTronco){
   	vejez = _vejez
   	tamanioTronco = _tamanioTronco
@@ -24,9 +25,9 @@ class Arbol {
   	}
   	
   }
-  method capacidadUsada() = items.fold(0, {acum, item =>  acum + item.lugares()} )
+  method capacidadUsada() = items.sum({item => item.lugares()})
   method capacidadDisponible() = self.lugares() - self.capacidadUsada()
-  method sumaTodasImportancias() = items.fold(0, {acum, item =>  acum + item.importancia()} )
+  method sumaTodasImportancias() = items.sum({item => item.importancia()})
   method importancia() = self.sumaTodasImportancias()
   method promedioImportancia() = self.sumaTodasImportancias() / self.items().size()
   method itemsImportantes() = items.filter({item => item.importancia() > self.promedioImportancia()})
@@ -34,11 +35,25 @@ class Arbol {
   method borrarVoluminosos(){
   	self.itemsVoluminosos().forEach({itemVol => items.remove(itemVol) })
   }
-  method destinatariosItems() {
-  	var todos = []
-  	var sinRep = []
-  	items.forEach({item => todos.addAll(item.destinatarios())})
-  	return todos
+  method todosDestinatarios(){
+  	var todosDestinatarios = []  	
+  	items.forEach({item => 
+  		todosDestinatarios.addAll(item.destinatarios())
+  	})
+  	return todosDestinatarios
+  }
+  method destinatariosItems() =  	  	  	
+	self.todosDestinatarios().asSet().fold(new Dictionary(), 
+		{dic, destinatario => 
+		var repeticiones = self.todosDestinatarios()
+			.count({unDestinatario => unDestinatario == destinatario})
+		dic.put(destinatario, repeticiones)  		
+	})
+  	
+  
+  method mostrarDestinatariosRepetidos(){
+  	self.destinatariosItems().sortBy({dest,cant => cant})
+  		.forEach({dest,cant => console.println(dest +" "+cant)})
   }
     
 }
@@ -150,22 +165,27 @@ class Figura {
 	method adornos(_adornos){
 		adornos = _adornos
 	}
-	method lugares() = 1 + adornos.fold(0, {acum, adorno =>  acum + adorno.lugares()} )
-	method adornosOrdenadosPorImportancia() = 
-		adornos.sortedBy({adorno1, adorno2 => adorno1.importancia() < adorno2.importancia()})
-	method adornoMasImportante() = self.adornosOrdenadosPorImportancia().first() 
+	method lugares() = 1 + adornos.sum({adorno => adorno.lugares()})		
+	method adornoMasImportante() = adornos.max({adorno => adorno.importancia()}) 
 	method importancia() = self.adornoMasImportante()
 	method agregarDestinatario(_persona){
  	}
  	method destinatarios() = []
 }
 
-class Estrella{
-	var destinatarios = []
+class Estrella{	
 	method lugares() = 1	 
 	method importancia() = 10
 	method agregarDestinatario(_persona){
- 		destinatarios.add(_persona)
+ 		casa.agregarHabitante(_persona)
  	}
- 	method destinatarios() = destinatarios
+ 	method destinatarios() = casa.habitantes()
+ }
+ 
+ object casa{
+ 	var habitantes = ["pepe","carlos","maria","juan"]
+ 	method habitantes() = habitantes
+ 	method agregarHabitante(_habitante){
+ 		habitantes.add(_habitante)
+ 	} 	
  }
