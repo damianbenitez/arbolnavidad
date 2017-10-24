@@ -47,12 +47,13 @@ class Arbol {
 		{dic, destinatario => 
 		var repeticiones = self.todosDestinatarios()
 			.count({unDestinatario => unDestinatario == destinatario})
-		dic.put(destinatario, repeticiones)  		
+		dic.put(destinatario, repeticiones)
+		dic  		
 	})
   	
   
   method mostrarDestinatariosRepetidos(){
-  	self.destinatariosItems().sortBy({dest,cant => cant})
+  	self.destinatariosItems()
   		.forEach({dest,cant => console.println(dest +" "+cant)})
   }
     
