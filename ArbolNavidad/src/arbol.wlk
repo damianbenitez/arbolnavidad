@@ -43,18 +43,18 @@ class Arbol {
   	return todosDestinatarios
   }
   method destinatariosItems() =  	  	  	
-	self.todosDestinatarios().asSet().fold(new Dictionary(), 
-		{dic, destinatario => 
+	self.todosDestinatarios().asSet().fold(new List(), 
+		{list, destinatario => 
 		var repeticiones = self.todosDestinatarios()
 			.count({unDestinatario => unDestinatario == destinatario})
-		dic.put(destinatario, repeticiones)
-		dic  		
+		list.add(new Repeticion(destinatario, repeticiones))
+		list  		
 	})
   	
   
   method mostrarDestinatariosRepetidos(){
-  	self.destinatariosItems()
-  		.forEach({dest,cant => console.println(dest +" "+cant)})
+  	self.destinatariosItems().sortedBy({d1, d2 => d1.repeticiones() > d2.repeticiones() })
+  		.forEach({dest => console.println(dest.destinatario() +" "+dest.repeticiones())})
   }
     
 }
@@ -189,4 +189,16 @@ class Estrella{
  	method agregarHabitante(_habitante){
  		habitantes.add(_habitante)
  	} 	
+ }
+ 
+ class Repeticion {
+ 	var destinatario
+ 	var repeticiones
+ 	constructor(_destinatario, _repeticiones){
+ 		destinatario = _destinatario
+		repeticiones = _repeticiones
+ 	} 	
+ 	method destinatario() = destinatario
+ 	method repeticiones() = repeticiones
+
  }

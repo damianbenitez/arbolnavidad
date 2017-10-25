@@ -6,9 +6,6 @@ object reports {
 	var tarjeta2 = new Tarjeta("carlos", 15)
 	var regalo1 = new Regalo(["pepe","maria"])
 	var adorno1 = new Adorno(2,1)
-	var adorno2 = new Adorno(6,1)
-	var figura1 = new Figura([adorno1])
-//	var figura2 = new Figura([adorno2,adorno1])
 	var estrella1 = new Estrella()
 		
 	method initialize(){
